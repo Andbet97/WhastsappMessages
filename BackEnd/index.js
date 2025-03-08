@@ -6,7 +6,7 @@ const messageRoutes = require('./views/messageRoutes.js');
 // Create express app
 const app = express();
 // Define port to serve application
-const port = 3000;
+const port = process.env.PORT ?? 8000;
 // Use morgan to show HTTP trafic in terminal consol
 app.use(logger('dev'));
 
@@ -18,5 +18,5 @@ app.use('/', messageRoutes);
 
 // Run server application
 app.listen(port, () => {
-    console.log('Server is runing!')
+    console.log(`Server running on port ${port}`);
 });

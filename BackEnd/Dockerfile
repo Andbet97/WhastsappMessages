@@ -1,11 +1,11 @@
-FROM node:23-alpine3.20
+FROM node:22.14.0
+
+RUN apt-get update && apt-get install -y chromium
 
 WORKDIR /app
 
 COPY . .
 
 RUN npm install
-
-EXPOSE 3000
 
 CMD [ "npm", "start" ]

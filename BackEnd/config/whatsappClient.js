@@ -4,6 +4,9 @@ const qrcode = require('qrcode-terminal');
 // Create a new client instance
 const client = new Client({
   authStrategy: new LocalAuth(), // Save sesión localAuth strategy
+  puppeteer: {
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  }
 });
 
 // When the client received QR-Code
