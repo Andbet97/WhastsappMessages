@@ -1,0 +1,24 @@
+services:
+  server:
+    build: ./BackEnd
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./BackEnd/.env
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - my_network
+
+  redis:
+    image: "redis:alpine"
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+     - my_network
+
+networks:
+  my_network:
+    driver: bridge

@@ -1,20 +1,14 @@
 const express = require('express');
-const messageController = require("../controllers/messageController");
+const messageController = require('../controllers/messageController');
 
 // Use express router
 const router = express.Router();
 
-// Register /message route, only response pre-load message
-router.get('/messages', ( res, req ) => {
-    req.json(
-        {
-            msg: 'Mensajes encolados'
-        }
-    );
-});
+// Register /message GET, responsability defined in getMessages controller function
+router.get('/messages', messageController.getMessages);
 
 // Register /send-message POST, responsability defined in sendMessage controller function
-router.post('/send-messages', messageController.sendMessage);
+router.post('/send-message', messageController.sendMessage);
 
 // Export router
 module.exports = router;
