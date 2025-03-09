@@ -10,6 +10,9 @@ services:
     restart: unless-stopped
     networks:
       - my_network
+    volumes:
+      - ./BackEnd/.wwebjs_auth:/app/.wwebjs_auth
+      - ./BackEnd/.wwebjs_cache:/app/.wwebjs_cache
 
   redis:
     image: "redis:alpine"
@@ -18,6 +21,18 @@ services:
       - "6379:6379"
     networks:
      - my_network
+  
+  app:
+    build: ./FrontEnd
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./FrontEnd/.env
+    depends_on:
+      - server
+    restart: unless-stopped
+    networks:
+      - my_network
 
 networks:
   my_network:
