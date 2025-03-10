@@ -24,6 +24,17 @@ client.on('ready', () => {
 // When recive message, add to queue
 client.on('message_create', async (message) => {
   console.log('Recived message:', message.body);
+  // If is a broadcast message don't queue
+  if (message.broadcast || message.from.includes('broadcast')) {
+    console.log('Message was a broadcast');
+    return;
+  }
+
+  // If is a status message don't queue
+  if (message.isStatus || message.from.includes('status')) {
+    console.log('Message was a status');
+    return;
+  }
 
   // Add message to queue
   await messageQueue.add('newMessage', {

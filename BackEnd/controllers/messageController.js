@@ -41,17 +41,17 @@ const sendMessage = async (req, res) => {
 // Controller to get and clear queued messages
 const getMessages = async (req, res) => {
   try {
-    // Get jobs from the queue (waiting, active, delayed)
-    const completedJobs = await messageQueue.getJobs(['completed']);
+    // Get jobs from the queue (waiting, active, delayed, completed)
+    const jobs = await messageQueue.getJobs(['waiting', 'active', 'delayed','completed']);
 
     // Extract job data and format phone number
-    const messages = completedJobs.map((job) => ({
+    const messages = jobs.map((job) => ({
       ...job.data,
       from: '+' + job.data.from.replace(/@.*/, ''),
     }));
 
     // Clear the queue after retrieving the messages
-    await messageQueue.drain();
+    await messageQueue.obliterate({ force: true });
 
     res.json({ success: true, messages });
   } catch (error) {
