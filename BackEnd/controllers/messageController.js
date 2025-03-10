@@ -44,8 +44,8 @@ const getMessages = async (req, res) => {
     // Get jobs from the queue (waiting, active, delayed, completed)
     const jobs = await messageQueue.getJobs(['waiting', 'active', 'delayed','completed']);
 
-    // Extract job data and format phone number
-    const messages = jobs.map((job) => ({
+    // Extract job data and format phone number, reverse because first element are last recived message
+    const messages = jobs.reverse().map((job) => ({
       ...job.data,
       from: '+' + job.data.from.replace(/@.*/, ''),
     }));
