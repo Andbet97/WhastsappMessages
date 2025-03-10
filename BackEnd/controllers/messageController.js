@@ -1,5 +1,6 @@
 const whatsappService = require('../services/whatsappService');
 const messageQueue = require('../config/queue');
+const { getReceivedMessages, insertMessage } = require('../models/messagesModel');
 
 // Message sender controller
 const sendMessage = async (req, res) => {
@@ -28,8 +29,12 @@ const sendMessage = async (req, res) => {
   }
 
   try {
+    const fixedNumber = number.replace(/^\+/, '');
     // Send message with whatsApp service, Delete '+' to number to send correctly
-    const response = await whatsappService.sendMessage(number.replace(/^\+/, ''), message);
+    const response = await whatsappService.sendMessage(fixedNumber, message);
+    // Save message on DB
+    const timestampUnix = Math.floor(Date.now() / 1000);
+    insertMessage(fixedNumber, message, timestampUnix, 1);
     // Response json success
     res.json(response);
   } catch (error) {
@@ -39,7 +44,7 @@ const sendMessage = async (req, res) => {
 };
 
 // Controller to get and clear queued messages
-const getMessages = async (req, res) => {
+const getQueueMessages = async (req, res) => {
   try {
     // Get jobs from the queue (waiting, active, delayed, completed)
     const jobs = await messageQueue.getJobs(['waiting', 'active', 'delayed','completed']);
@@ -59,5 +64,14 @@ const getMessages = async (req, res) => {
   }
 };
 
+const getMessages = (req, res) => {
+  getReceivedMessages((err, rows) => {
+    if (err) {
+      res.status(500).json({ success: false, error: 'Error retrieving messages' });
+    }
+    res.json({ success: false, messages: rows });  // Return the list of messages
+  });
+};
+
 // Export controllers
-module.exports = { sendMessage, getMessages };
+module.exports = { sendMessage, getMessages, getQueueMessages };

@@ -1,6 +1,7 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const messageQueue = require('./queue');
+const { insertMessage } = require('../models/messagesModel');
 
 // Create a new client instance
 const client = new Client({
@@ -42,6 +43,8 @@ client.on('message', async (message) => {
     body: message.body, // Content
     timestamp: message.timestamp, // Time stamp
   });
+
+  insertMessage(message.from, message.body, message.timestamp);
 
   console.log('Message enqueued successfully.');
 });

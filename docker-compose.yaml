@@ -13,6 +13,7 @@ services:
     volumes:
       - ./BackEnd/.wwebjs_auth:/app/.wwebjs_auth
       - ./BackEnd/.wwebjs_cache:/app/.wwebjs_cache
+      - ./BackEnd/messages.db:/app/messages.db
 
   redis:
     image: "redis:alpine"
