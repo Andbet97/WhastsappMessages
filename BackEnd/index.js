@@ -4,6 +4,9 @@ const logger = require('morgan');
 const messageRoutes = require('./views/messageRoutes.js');
 const cors = require("cors");
 
+// Worker
+require('./workers/messageWorker.js');
+
 // Create express app
 const app = express();
 // Define port to serve application
@@ -20,6 +23,9 @@ app.use(express.json());
 app.use('/', messageRoutes);
 
 // Run server application
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+// Export app to test
+module.exports = { app, server };

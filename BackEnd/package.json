@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js & node workers/messageWorker.js",
-    "dev": "node --watch index.js & node workers/messageWorker.js"
+    "test": "jest --verbose --silent",
+    "start": "node index.js",
+    "dev": "node --watch index.js"
   },
   "author": "Andres Felipe Betancurt",
   "license": "ISC",
@@ -15,8 +15,13 @@
     "cors": "2.8.5",
     "express": "4.21.2",
     "ioredis": "5.6.0",
+    "jest": "29.7.0",
     "morgan": "1.10.0",
     "qrcode-terminal": "0.12.0",
+    "supertest": "7.0.0",
     "whatsapp-web.js": "1.26.0"
+  },
+  "devDependencies": {
+    "sinon": "19.0.2"
   }
 }
