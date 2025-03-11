@@ -29,12 +29,11 @@ const sendMessage = async (req, res) => {
   }
 
   try {
-    const fixedNumber = number.replace(/^\+/, '');
     // Send message with whatsApp service, Delete '+' to number to send correctly
-    const response = await whatsappService.sendMessage(fixedNumber, message);
+    const response = await whatsappService.sendMessage(number.replace(/^\+/, ''), message);
     // Save message on DB
     const timestampUnix = Math.floor(Date.now() / 1000);
-    insertMessage(fixedNumber, message, timestampUnix, 1);
+    insertMessage(number, message, timestampUnix, 1);
     // Response json success
     res.json(response);
   } catch (error) {
@@ -50,10 +49,7 @@ const getQueueMessages = async (req, res) => {
     const jobs = await messageQueue.getJobs(['waiting', 'active', 'delayed','completed']);
 
     // Extract job data and format phone number, reverse because first element are last recived message
-    const messages = jobs.reverse().map((job) => ({
-      ...job.data,
-      from: '+' + job.data.from.replace(/@.*/, ''),
-    }));
+    const messages = jobs.reverse().map((job) => (job.data));
 
     // Clear the queue after retrieving the messages
     await messageQueue.obliterate({ force: true });
@@ -69,7 +65,7 @@ const getMessages = (req, res) => {
     if (err) {
       res.status(500).json({ success: false, error: 'Error retrieving messages' });
     }
-    res.json({ success: false, messages: rows });  // Return the list of messages
+    res.json({ success: true, messages: rows });  // Return the list of messages
   });
 };
 

@@ -9,7 +9,7 @@ function insertMessage(sender, body, timestamp, sended = 0) {
 
 // Function to get all messages
 function getReceivedMessages(callback) {
-  db.all('SELECT * FROM messages WHERE sended = 0', (err, rows) => {
+  db.all('SELECT sender AS "from", body, timestamp FROM messages WHERE sended = 0', (err, rows) => {
     callback(err, rows);
   });
 }

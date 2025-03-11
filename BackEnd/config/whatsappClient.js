@@ -37,14 +37,16 @@ client.on('message', async (message) => {
     return;
   }
 
+  const fixedNumber = '+' + message.from.replace(/@.*/, ''); // Sender's number format 
+
   // Add message to queue
   await messageQueue.add('newMessage', {
-    from: message.from, // Sender's number
+    from: fixedNumber,
     body: message.body, // Content
     timestamp: message.timestamp, // Time stamp
   });
 
-  insertMessage(message.from, message.body, message.timestamp);
+  insertMessage(fixedNumber, message.body, message.timestamp);
 
   console.log('Message enqueued successfully.');
 });
